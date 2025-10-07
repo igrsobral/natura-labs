@@ -103,6 +103,7 @@ pnpm setup:git    # Set up git commit message template
 - **Math**: KaTeX for formula rendering
 - **Code Quality**: ESLint + Prettier + Husky + lint-staged
 - **Commit Standards**: Commitlint with conventional commits
+- **AI Integration**: Mock AI assistant (ready for OpenAI Agent Kit upgrade)
 
 ### Design Patterns
 
@@ -258,6 +259,302 @@ Frontend (React) ↔ MCP Client ↔ MCP Server ↔ AI Models
                               Data Processors
                               Visualization Generators
 ```
+
+## 🤖 Future Enhancement: OpenAI Agent Kit Integration
+
+### Overview
+
+The current dashboard provides an excellent foundation for integrating [OpenAI's Agent Kit](https://platform.openai.com/docs/guides/agents), which would transform the mock AI assistant into a fully functional, context-aware analytics agent.
+
+### Agent Kit Integration Strategy
+
+#### 1. **Contextual Data Analysis Agent**
+
+```typescript
+// Enhanced agent with OpenAI Agent Kit
+import { Agent, Tool } from "@openai/agent-kit";
+
+const salesAnalyticsAgent = new Agent({
+  name: "SalesAnalyticsAgent",
+  description: "Intelligent sales data analysis and visualization assistant",
+  instructions: `
+    You are a sales analytics expert. You have access to sales data for multiple brands and categories.
+    Current context: ${JSON.stringify(currentDashboardState)}
+    
+    Help users:
+    - Analyze sales trends and patterns
+    - Generate insights from data
+    - Create custom visualizations
+    - Identify anomalies and opportunities
+  `,
+  tools: [
+    chartGenerationTool,
+    dataFilteringTool,
+    trendAnalysisTool,
+    reportGenerationTool,
+  ],
+});
+```
+
+#### 2. **Smart Dashboard Tools**
+
+```typescript
+// Agent tools for dashboard interaction
+const dashboardTools: Tool[] = [
+  {
+    name: "generate_chart",
+    description: "Create interactive charts based on user requirements",
+    parameters: {
+      type: "object",
+      properties: {
+        chartType: { type: "string", enum: ["line", "bar", "pie", "scatter"] },
+        dataFilters: { type: "object" },
+        comparisonMode: {
+          type: "string",
+          enum: ["week-over-week", "cumulative"],
+        },
+      },
+    },
+    function: async params => {
+      // Integration with existing chart components
+      return generateChartComponent(params);
+    },
+  },
+
+  {
+    name: "analyze_trends",
+    description: "Perform statistical analysis on sales data",
+    parameters: {
+      type: "object",
+      properties: {
+        brands: { type: "array", items: { type: "string" } },
+        categories: { type: "array", items: { type: "string" } },
+        timeRange: { type: "string" },
+      },
+    },
+    function: async params => {
+      // Integration with existing analytics utils
+      return performTrendAnalysis(params);
+    },
+  },
+
+  {
+    name: "filter_data",
+    description: "Apply filters to the dashboard data",
+    parameters: {
+      type: "object",
+      properties: {
+        filters: { type: "object" },
+        sortBy: { type: "string" },
+        groupBy: { type: "string" },
+      },
+    },
+    function: async params => {
+      // Integration with existing table filtering
+      return applyDataFilters(params);
+    },
+  },
+];
+```
+
+#### 3. **Context-Aware Responses**
+
+```typescript
+// Enhanced context management
+const buildAgentContext = () => ({
+  currentData: useUIStore.getState().salesData,
+  activeFilters: useUIStore.getState().filters,
+  selectedBrands: useUIStore.getState().selectedBrands,
+  chartSettings: useUIStore.getState().chartSettings,
+  userPreferences: getUserPreferences(),
+  dashboardState: {
+    activeTab: useUIStore.getState().uiState.activeTab,
+    viewMode: useUIStore.getState().uiState.viewMode,
+    lastQuery: useUIStore.getState().lastQuery,
+  },
+});
+
+// Agent with full dashboard context
+const contextAwareAgent = new Agent({
+  name: "ContextualSalesAgent",
+  instructions: `
+    You have full access to the current dashboard state and user preferences.
+    Current context: ${JSON.stringify(buildAgentContext())}
+    
+    Provide contextual responses based on:
+    - Currently visible data and filters
+    - User's previous queries and interactions
+    - Dashboard state and active views
+    - Data patterns and anomalies you detect
+  `,
+  tools: dashboardTools,
+});
+```
+
+#### 4. **Advanced Analytics Integration**
+
+```typescript
+// Integration with existing analytics utilities
+const advancedAnalyticsTools: Tool[] = [
+  {
+    name: "detect_anomalies",
+    description: "Identify unusual patterns in sales data",
+    function: async params => {
+      // Use existing performance monitoring
+      const performanceData = PerformanceMonitor.getMetrics();
+      return detectDataAnomalies(params, performanceData);
+    },
+  },
+
+  {
+    name: "generate_insights",
+    description: "Generate business insights from current data",
+    function: async params => {
+      // Integration with existing data processing
+      const insights = await generateBusinessInsights(params);
+      return formatInsightsForDisplay(insights);
+    },
+  },
+
+  {
+    name: "create_report",
+    description: "Generate comprehensive sales reports",
+    function: async params => {
+      // Use existing chart and table components
+      return generateInteractiveReport(params);
+    },
+  },
+];
+```
+
+### Implementation Roadmap
+
+#### Phase 1: Foundation Setup
+
+- [ ] Install and configure OpenAI Agent Kit
+- [ ] Create basic agent with dashboard context
+- [ ] Implement core tools (chart generation, data filtering)
+- [ ] Replace mock responses with agent-generated content
+
+#### Phase 2: Enhanced Intelligence
+
+- [ ] Add trend analysis and anomaly detection tools
+- [ ] Implement context-aware conversation memory
+- [ ] Create personalized insights based on user behavior
+- [ ] Add natural language query processing
+
+#### Phase 3: Advanced Features
+
+- [ ] Implement automated report generation
+- [ ] Add predictive analytics capabilities
+- [ ] Create custom visualization recommendations
+- [ ] Integrate with external data sources
+
+#### Phase 4: Production Optimization
+
+- [ ] Implement response caching and optimization
+- [ ] Add error handling and fallback mechanisms
+- [ ] Create usage analytics and monitoring
+- [ ] Optimize for performance and cost
+
+### Technical Integration Points
+
+#### Current Architecture Enhancement
+
+```typescript
+// Enhanced AI Assistant component
+const AIAssistant: React.FC = () => {
+  const [agent, setAgent] = useState<Agent | null>(null);
+  const dashboardContext = buildAgentContext();
+
+  useEffect(() => {
+    // Initialize agent with current context
+    const salesAgent = new Agent({
+      name: "SalesAnalyticsAgent",
+      instructions: buildContextualInstructions(dashboardContext),
+      tools: [...dashboardTools, ...advancedAnalyticsTools],
+    });
+
+    setAgent(salesAgent);
+  }, [dashboardContext]);
+
+  const handleQuery = async (query: string) => {
+    if (!agent) return "Agent not initialized";
+
+    // Agent processes query with full dashboard context
+    const response = await agent.run(query, {
+      context: dashboardContext,
+      tools: getRelevantTools(query),
+    });
+
+    return response;
+  };
+
+  // Rest of component implementation...
+};
+```
+
+#### State Management Integration
+
+```typescript
+// Enhanced store with agent integration
+const useUIStore = create<UIState>((set, get) => ({
+  // Existing state...
+
+  // Agent-specific state
+  agentContext: null,
+  agentHistory: [],
+
+  // Agent actions
+  updateAgentContext: context => set({ agentContext: context }),
+  addToAgentHistory: interaction =>
+    set(state => ({
+      agentHistory: [...state.agentHistory, interaction],
+    })),
+
+  // Enhanced actions with agent integration
+  setActiveTab: tab => {
+    set({ uiState: { ...get().uiState, activeTab: tab } });
+    // Update agent context when tab changes
+    get().updateAgentContext(buildAgentContext());
+  },
+}));
+```
+
+### Benefits of Agent Kit Integration
+
+#### For Users
+
+- **Natural Language Queries**: "Show me which brand performed best last month"
+- **Contextual Insights**: Agent understands current view and provides relevant analysis
+- **Automated Reports**: Generate comprehensive reports with natural language summaries
+- **Predictive Analytics**: Forecast trends and identify opportunities
+
+#### For Developers
+
+- **Structured Tool Integration**: Clean API for adding new analytics capabilities
+- **Context Management**: Automatic context passing and state synchronization
+- **Error Handling**: Built-in retry mechanisms and fallback responses
+- **Extensibility**: Easy to add new tools and capabilities
+
+#### For Business
+
+- **Enhanced User Experience**: More intuitive and powerful data analysis
+- **Increased Engagement**: Users can explore data through conversation
+- **Better Insights**: AI-powered pattern recognition and recommendations
+- **Scalability**: Agent can handle complex queries and multiple users
+
+### Migration Strategy
+
+#### From Current Mock to Agent Kit
+
+1. **Gradual Replacement**: Start by replacing simple mock responses
+2. **Tool-by-Tool**: Implement one agent tool at a time
+3. **A/B Testing**: Compare agent responses with mock responses
+4. **User Feedback**: Collect feedback and iterate on agent behavior
+5. **Full Migration**: Complete transition to agent-powered assistant
+
+This integration would transform the dashboard from a static analytics tool into an intelligent, conversational data analysis platform, significantly enhancing user experience and analytical capabilities.
 
 ## 🧪 Testing Strategy
 
