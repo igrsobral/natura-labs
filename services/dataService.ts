@@ -91,7 +91,7 @@ class DataCache {
       return null;
     }
 
-    return entry.data;
+    return entry.data as T;
   }
 
   has(key: string): boolean {
@@ -195,12 +195,14 @@ const validateSalesData = (data: unknown): data is SalesData => {
     return false;
   }
 
-  if (!Array.isArray(data.brands) || !Array.isArray(data.dateRange)) {
+  const salesData = data as { brands?: unknown; dateRange?: unknown };
+
+  if (!Array.isArray(salesData.brands) || !Array.isArray(salesData.dateRange)) {
     return false;
   }
 
   // Validate brands structure
-  for (const brand of data.brands) {
+  for (const brand of salesData.brands) {
     if (!brand.name || typeof brand.name !== 'string') {
       return false;
     }
@@ -228,7 +230,7 @@ const validateSalesData = (data: unknown): data is SalesData => {
   }
 
   // Validate date range
-  for (const date of data.dateRange) {
+  for (const date of salesData.dateRange) {
     if (typeof date !== 'string') {
       return false;
     }

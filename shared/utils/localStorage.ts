@@ -177,7 +177,7 @@ export const hasStorageItem = (key: string): boolean => {
       return false;
     }
 
-    const parsed: StorageItem<any> = JSON.parse(item);
+    const parsed: StorageItem<unknown> = JSON.parse(item);
 
     // Check expiration
     if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
@@ -210,7 +210,7 @@ export const getStorageItemMetadata = (key: string): {
       return { exists: false };
     }
 
-    const parsed: StorageItem<any> = JSON.parse(item);
+    const parsed: StorageItem<unknown> = JSON.parse(item);
     const now = Date.now();
 
     return {
@@ -244,7 +244,7 @@ export const cleanupExpiredItems = (): number => {
         const item = localStorage.getItem(key);
         if (!item) continue;
 
-        const parsed: StorageItem<any> = JSON.parse(item);
+        const parsed: StorageItem<unknown> = JSON.parse(item);
         
         // Check if item has expiration and is expired
         if (parsed.expiresAt && Date.now() > parsed.expiresAt) {
@@ -295,6 +295,6 @@ export const createTypedStorage = <T>(keyPrefix: string) => {
 };
 
 // Export commonly used storage instances
-export const salesDataStorage = createTypedStorage<any>('natura_sales');
-export const uiStateStorage = createTypedStorage<any>('natura_ui');
-export const userPreferencesStorage = createTypedStorage<any>('natura_prefs');
+export const salesDataStorage = createTypedStorage<unknown>('natura_sales');
+export const uiStateStorage = createTypedStorage<unknown>('natura_ui');
+export const userPreferencesStorage = createTypedStorage<unknown>('natura_prefs');

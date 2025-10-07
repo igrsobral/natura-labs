@@ -244,7 +244,7 @@ export class BundleAnalyzer {
       moduleCount: number;
       chunkCount: number;
     };
-    budgetStatus: Record<string, any>;
+    budgetStatus: Record<string, unknown>;
     recommendations: string[];
     largestModules: ModuleInfo[];
     largestChunks: ChunkInfo[];
@@ -252,7 +252,12 @@ export class BundleAnalyzer {
     const bundleInfo = this.analyzeCurrentPage();
     
     // Budget analysis
-    const budgetStatus: Record<string, any> = {};
+    const budgetStatus: Record<string, {
+      withinBudget: boolean;
+      budget: number;
+      actual: number;
+      percentage: number;
+    }> = {};
     const jsModules = bundleInfo.modules.filter(m => m.type === 'js');
     const cssModules = bundleInfo.modules.filter(m => m.type === 'css');
     const initialChunks = bundleInfo.chunks.filter(c => c.isInitial);

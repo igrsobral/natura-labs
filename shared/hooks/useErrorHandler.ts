@@ -97,7 +97,7 @@ export function useErrorHandler(
             }) as ReturnType<T>;
           }
           
-          return result;
+          return result as ReturnType<T>;
         } catch (error) {
           handleError(error);
           return undefined;

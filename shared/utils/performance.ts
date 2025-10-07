@@ -98,8 +98,8 @@ export class PerformanceMonitor {
       return null;
     }
 
-    const memory = (performance as any).memory;
-    return memory.usedJSHeapSize / 1024 / 1024; // Convert to MB
+    const memory = (performance as { memory?: { usedJSHeapSize: number } }).memory;
+    return memory ? memory.usedJSHeapSize / 1024 / 1024 : null; // Convert to MB
   }
 
   cleanup(): void {
@@ -112,7 +112,7 @@ export class PerformanceMonitor {
 // Performance measurement utilities
 export const measurePerformance = {
   // Measure function execution time
-  measureFunction: <T extends (...args: any[]) => any>(
+  measureFunction: <T extends (...args: unknown[]) => unknown>(
     fn: T,
     name?: string
   ): T => {
@@ -128,7 +128,7 @@ export const measurePerformance = {
   },
 
   // Measure async function execution time
-  measureAsyncFunction: <T extends (...args: any[]) => Promise<any>>(
+  measureAsyncFunction: <T extends (...args: unknown[]) => Promise<unknown>>(
     fn: T,
     name?: string
   ): T => {
@@ -165,8 +165,6 @@ export const bundleAnalysis = {
         return;
       }
 
-      const start = performance.now();
-      
       // Use a safer approach - just resolve with 0 for now to avoid build issues
       // In a real implementation, this would need proper module resolution
       resolve(0);
@@ -204,7 +202,7 @@ export const reactPerformance = {
   ) => {
     const name = componentName || WrappedComponent.displayName || WrappedComponent.name;
 
-    return React.memo((props: P) => {
+    const MemoizedComponent = React.memo((props: P) => {
       const renderEnd = measurePerformance.measureRender(name);
 
       React.useEffect(() => {
@@ -213,6 +211,9 @@ export const reactPerformance = {
 
       return React.createElement(WrappedComponent, props);
     });
+    
+    MemoizedComponent.displayName = `withPerformanceTracking(${name})`;
+    return MemoizedComponent;
   },
 
   // Hook for measuring component lifecycle
@@ -230,7 +231,7 @@ export const reactPerformance = {
       setRenderTime(time);
 
       console.log(`${componentName} render time: ${time}ms`);
-    });
+    }, [componentName]);
 
     return { renderTime };
   }
@@ -241,7 +242,7 @@ export const memoryManagement = {
   // Force garbage collection (if available)
   forceGC: () => {
     if (typeof window !== 'undefined' && 'gc' in window) {
-      (window as any).gc();
+      (window as { gc?: () => void }).gc?.();
     }
   },
 
@@ -251,13 +252,13 @@ export const memoryManagement = {
       return null;
     }
 
-    const memory = (performance as any).memory;
-    return {
+    const memory = (performance as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+    return memory ? {
       usedJSHeapSize: Math.round(memory.usedJSHeapSize / 1024 / 1024), // MB
       totalJSHeapSize: Math.round(memory.totalJSHeapSize / 1024 / 1024), // MB
       jsHeapSizeLimit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024), // MB
       usage: Math.round((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100) // %
-    };
+    } : null;
   },
 
   // Check for memory leaks

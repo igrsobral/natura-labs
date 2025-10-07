@@ -3,7 +3,7 @@
  * Handles average sales, week-over-week, and cumulative calculations with null value handling
  */
 
-import type { Category, ChartDataset } from '@/shared/types';
+import type { ChartDataset } from '@/shared/types';
 
 export interface CalculationResult {
   value: number | null;
@@ -28,8 +28,7 @@ export interface CumulativeResult {
  * Formula: Total Sales / Weeks with Data
  */
 export function calculateAverageSales(
-  sales: (number | null)[],
-  label?: string
+  sales: (number | null)[]
 ): CalculationResult {
   try {
     // Filter out null values
@@ -177,7 +176,7 @@ export function calculateCumulative(sales: (number | null)[]): CumulativeResult 
       data: cumulativeData,
       totalSum: hasValidData ? runningTotal : null
     };
-  } catch (error) {
+  } catch {
     return {
       data: sales.map(() => null),
       totalSum: null
@@ -189,8 +188,7 @@ export function calculateCumulative(sales: (number | null)[]): CumulativeResult 
  * Calculate multiple metrics for a dataset
  */
 export function calculateDatasetMetrics(
-  dataset: ChartDataset,
-  dateLabels: string[]
+  dataset: ChartDataset
 ): {
   averageSales: CalculationResult;
   weekOverWeek: WeekOverWeekResult;
@@ -198,10 +196,7 @@ export function calculateDatasetMetrics(
   totalSales: number | null;
   validWeeks: number;
 } {
-  const averageSales = calculateAverageSales(
-    dataset.data,
-    `${dataset.brandName} - ${dataset.categoryName}`
-  );
+  const averageSales = calculateAverageSales(dataset.data);
 
   const weekOverWeek = calculateWeekOverWeek(dataset.data, true);
   const cumulative = calculateCumulative(dataset.data);

@@ -1,5 +1,5 @@
-import { SalesData, Brand, Category, ProcessedChartData, ChartDataset, ProcessedTableData, TableRow, TableTotals } from '../types';
-import { filterValidSales, hasValidData, countValidDataPoints } from './dataValidation';
+import { SalesData, ProcessedChartData, ChartDataset, ProcessedTableData, TableRow, TableTotals } from '../types';
+import { filterValidSales } from './dataValidation';
 
 // Chart data transformation utilities
 
@@ -169,7 +169,6 @@ export function calculateAverageFormula(sales: (number | null)[]): string {
 export function generateLatexFormula(sales: (number | null)[]): string {
   const validSales = filterValidSales(sales);
   const validCount = validSales.length;
-  const total = validSales.reduce((sum, sale) => sum + sale, 0);
   
   if (validCount === 0) {
     return '\\text{Insufficient data}';

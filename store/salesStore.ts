@@ -1,25 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SalesData, DataError, LoadingState } from '../shared/types';
-import { dataService, withRetry, DataServiceError, DataServiceErrorType } from '../services/dataService';
+import { dataService, DataServiceError, DataServiceErrorType } from '../services/dataService';
 
 // Configuration constants
 const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 const MAX_RETRIES = 3;
 const BASE_RETRY_DELAY_MS = 1000; // 1 second
-const INITIAL_LOAD_DELAY_MS = 1000;
-const RETRY_LOAD_DELAY_MS = 500;
-const RANDOM_DELAY_FACTOR = 1500;
-
-
-const NETWORK_ERROR_CHANCE = 0.05; // 5%
-const TIMEOUT_ERROR_CHANCE = 0.08; // 3% (0.08 - 0.05)
-const SERVER_ERROR_CHANCE = 0.1;   // 2% (0.1 - 0.08)
-const VALIDATION_ERROR_CHANCE = 0.11; // 1% (0.11 - 0.1)
-
-// Time conversion constants
-const MS_PER_SECOND = 1000;
-const MS_PER_MINUTE = 60 * MS_PER_SECOND;
 
 interface SalesStore extends LoadingState {
     // Data state
@@ -65,18 +52,18 @@ export enum DataErrorType {
     UNKNOWN_ERROR = 'UNKNOWN_ERROR'
 }
 
-// Enhanced error class
-class DataLoadError extends Error {
-    constructor(
-        message: string,
-        public type: DataErrorType,
-        public retryable: boolean = true,
-        public details?: unknown
-    ) {
-        super(message);
-        this.name = 'DataLoadError';
-    }
-}
+// Enhanced error class (currently unused but kept for future use)
+// class DataLoadError extends Error {
+//     constructor(
+//         message: string,
+//         public type: DataErrorType,
+//         public retryable: boolean = true,
+//         public details?: unknown
+//     ) {
+//         super(message);
+//         this.name = 'DataLoadError';
+//     }
+// }
 
 // Load sales data using the data service
 const loadSalesDataFromService = async (attempt: number = 1): Promise<SalesData> => {
@@ -266,7 +253,7 @@ export const useSalesStore = create<SalesStore>()(
                 const state = get();
                 if (!state.error) return false;
 
-                const details = state.error.details as any;
+                const details = state.error.details as { retryable?: boolean };
                 return details?.retryable !== false && state.retryCount < state.maxRetries;
             },
 
