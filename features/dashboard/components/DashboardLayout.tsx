@@ -38,7 +38,7 @@ export function DashboardLayout({
             direction="vertical" 
             spacing={spacing}
             responsive={{
-              sm: Math.max(4, spacing - 2),
+              sm: Math.max(4, spacing - 2) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24,
               md: spacing,
               lg: spacing
             }}

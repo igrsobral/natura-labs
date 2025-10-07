@@ -4,9 +4,10 @@ import React, { useMemo } from 'react';
 import { EmptyState } from '@/shared/components';
 import { SkeletonTable } from '@/components/ui/skeleton-table';
 import { Filter } from 'lucide-react';
+import type { ProcessedTableData, TableFilters } from '@/shared/types';
 
 import { SalesTable } from './SalesTable';
-import TableFilters from './TableFilters';
+import TableFiltersComponent from './TableFilters';
 import { TablePagination, usePagination } from './TablePagination';
 import { useTableData, useTableFilters } from '../hooks';
 import { useSalesStore } from '@/store/salesStore';
@@ -19,7 +20,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
   className = ''
 }) => {
   let salesData, isLoading, error;
-  
+
   try {
     const storeState = useSalesStore();
     salesData = storeState.salesData;
@@ -45,7 +46,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
     isEmpty = true;
   }
 
-  let filters: unknown, filteredData: unknown, availableBrands: string[], availableCategories: string[], updateFilters: unknown, resetFilters: unknown, hasActiveFilters: boolean, filteredRowCount: number, totalRowCount: number;
+  let filters: TableFilters, filteredData: ProcessedTableData, availableBrands: string[], availableCategories: string[], updateFilters: (filters: Partial<TableFilters>) => void, resetFilters: () => void, hasActiveFilters: boolean, filteredRowCount: number, totalRowCount: number;
   try {
     const filterResult = useTableFilters(salesData);
     filters = filterResult.filters;
@@ -63,14 +64,14 @@ export const TableContainer: React.FC<TableContainerProps> = ({
     filteredData = tableData;
     availableBrands = [];
     availableCategories = [];
-    updateFilters = () => {};
-    resetFilters = () => {};
+    updateFilters = () => { };
+    resetFilters = () => { };
     hasActiveFilters = false;
     filteredRowCount = 0;
     totalRowCount = 0;
   }
 
-  let currentPage: number, totalPages: number, itemsPerPage: number, startIndex: number, endIndex: number, handlePageChange: unknown, handleItemsPerPageChange: unknown;
+  let currentPage: number, totalPages: number, itemsPerPage: number, startIndex: number, endIndex: number, handlePageChange: (page: number) => void, handleItemsPerPageChange: (itemsPerPage: number) => void;
   try {
     const paginationResult = usePagination(filteredRowCount, 25);
     currentPage = paginationResult.currentPage;
@@ -87,22 +88,23 @@ export const TableContainer: React.FC<TableContainerProps> = ({
     itemsPerPage = 25;
     startIndex = 0;
     endIndex = 0;
-    handlePageChange = () => {};
-    handleItemsPerPageChange = () => {};
+    handlePageChange = () => { };
+    handleItemsPerPageChange = () => { };
   }
 
   const paginatedRows = useMemo(() => {
-    return filteredData.rows.slice(startIndex, endIndex);
-  }, [filteredData.rows, startIndex, endIndex]);
+    const data = filteredData as ProcessedTableData;
+    return data.rows.slice(startIndex, endIndex);
+  }, [filteredData, startIndex, endIndex]);
 
   const paginatedTableData = useMemo(() => ({
-    ...filteredData,
+    ...(filteredData as ProcessedTableData),
     rows: paginatedRows
   }), [filteredData, paginatedRows]);
 
   const handleResetFilters = () => {
     resetFilters();
-    handlePageChange(1); 
+    handlePageChange(1);
   };
 
   // Loading state - use skeleton loader
@@ -126,7 +128,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
             </div>
           </div>
         </div>
-        
+
         {/* Skeleton table */}
         <SkeletonTable
           variant="default"
@@ -179,7 +181,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
     return (
       <div className={className}>
         <div className="space-y-6">
-          <TableFilters
+          <TableFiltersComponent
             filters={filters}
             availableBrands={availableBrands}
             availableCategories={availableCategories}
@@ -187,7 +189,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
             onFiltersChange={updateFilters}
             onReset={handleResetFilters}
           />
-          
+
           <EmptyState
             title="No Results Found"
             description="No sales data matches your current filter criteria. Try adjusting your filters or clearing them to see all data."
@@ -205,7 +207,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Filters */}
-      <TableFilters
+      <TableFiltersComponent
         filters={filters}
         availableBrands={availableBrands}
         availableCategories={availableCategories}
@@ -241,7 +243,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
           isLoading={isLoading}
           error={error?.message || null}
         />
-        
+
         {/* Pagination */}
         {filteredRowCount > 0 && (
           <div className="mt-4">

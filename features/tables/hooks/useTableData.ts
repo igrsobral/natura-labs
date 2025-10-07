@@ -248,7 +248,11 @@ export function validateTableData(data: unknown): data is ProcessedTableData {
     return false;
   }
 
-  const tableData = data as { headers?: unknown; rows?: unknown };
+  const tableData = data as { 
+    headers?: unknown; 
+    rows?: unknown; 
+    totals?: { byWeek?: unknown; grandTotal?: unknown } 
+  };
 
   // Check headers
   if (!Array.isArray(tableData.headers)) {
