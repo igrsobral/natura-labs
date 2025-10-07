@@ -210,7 +210,6 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
                   </div>
                   <ChartFormulas 
                     datasets={chartData.datasets}
-                    dateLabels={salesData.dateRange}
                     config={config}
                     className={isMobile ? 'text-sm' : ''}
                   />

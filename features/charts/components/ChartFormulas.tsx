@@ -7,7 +7,6 @@ import type { ChartDataset, ChartConfig } from '@/shared/types';
 
 interface ChartFormulasProps {
   datasets: ChartDataset[];
-  dateLabels: string[];
   config: ChartConfig;
   className?: string;
 }
@@ -17,7 +16,6 @@ interface ChartFormulasProps {
  */
 export const ChartFormulas: React.FC<ChartFormulasProps> = ({
   datasets,
-  dateLabels,
   config,
   className = ''
 }) => {
@@ -28,7 +26,7 @@ export const ChartFormulas: React.FC<ChartFormulasProps> = ({
   const formulaResults: CalculationResult[] = [];
 
   datasets.forEach(dataset => {
-    const metrics = calculateDatasetMetrics(dataset, dateLabels);
+    const metrics = calculateDatasetMetrics(dataset);
     
     formulaResults.push({
       ...metrics.averageSales,
@@ -92,7 +90,6 @@ function getChartTitle(config: ChartConfig): string {
 
 interface DatasetFormulaProps {
   dataset: ChartDataset;
-  dateLabels: string[];
   showDetailed?: boolean;
   className?: string;
 }
@@ -102,11 +99,10 @@ interface DatasetFormulaProps {
  */
 export const DatasetFormula: React.FC<DatasetFormulaProps> = ({
   dataset,
-  dateLabels,
   showDetailed = false,
   className = ''
 }) => {
-  const metrics = calculateDatasetMetrics(dataset, dateLabels);
+  const metrics = calculateDatasetMetrics(dataset);
   
   const formulas: CalculationResult[] = [metrics.averageSales];
   

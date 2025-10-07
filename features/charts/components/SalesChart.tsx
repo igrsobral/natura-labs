@@ -72,11 +72,11 @@ export const SalesChart: React.FC<SalesChartProps> = ({
         ...baseConfig.tooltip,
         show: showTooltip && enableInteractions
       },
-      series: baseConfig.series.map((series: { emphasis?: unknown; [key: string]: unknown }) => ({
+      series: baseConfig.series.map((series: { emphasis?: Record<string, unknown>; [key: string]: unknown }) => ({
         ...series,
         silent: !enableInteractions,
         emphasis: enableInteractions ? {
-          ...series.emphasis,
+          ...(series.emphasis || {}),
           scale: config.type === 'bar' ? 1.05 : 1.1,
           itemStyle: {
             shadowBlur: 10,

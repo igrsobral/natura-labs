@@ -43,7 +43,7 @@ export const CalculationCard: React.FC<CalculationCardProps> = ({ type, title, d
 
     switch (type) {
       case 'average': {
-        const result = calculateAverageSales(allSalesData, 'All Categories')
+        const result = calculateAverageSales(allSalesData)
         return formatCurrency(result.value)
       }
       case 'wow': {
