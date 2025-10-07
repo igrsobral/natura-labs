@@ -17,13 +17,19 @@ A comprehensive sales analytics dashboard built for the Natura Labs Frontend Dev
    pnpm install
    ```
 
-2. **Start the development server:**
+2. **Set up git commit template (optional):**
+
+   ```bash
+   pnpm setup:git
+   ```
+
+3. **Start the development server:**
 
    ```bash
    pnpm dev
    ```
 
-3. **Open your browser:**
+4. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ### Available Scripts
@@ -37,6 +43,7 @@ pnpm lint:fix     # Run ESLint with auto-fix
 pnpm test         # Run tests
 pnpm test:watch   # Run tests in watch mode
 pnpm test:ui      # Run tests with UI
+pnpm setup:git    # Set up git commit message template
 ```
 
 ## 📊 Features

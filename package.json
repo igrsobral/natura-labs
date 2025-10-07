@@ -11,7 +11,8 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
-    "prepare": "husky"
+    "prepare": "husky",
+    "setup:git": "git config commit.template .gitmessage"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",

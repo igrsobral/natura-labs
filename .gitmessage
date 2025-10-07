@@ -1,0 +1,27 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+
+# Types:
+# feat: A new feature
+# fix: A bug fix
+# docs: Documentation only changes
+# style: Changes that do not affect the meaning of the code
+# refactor: A code change that neither fixes a bug nor adds a feature
+# perf: A code change that improves performance
+# test: Adding missing tests or correcting existing tests
+# chore: Changes to the build process or auxiliary tools
+# ci: Changes to CI configuration files and scripts
+# build: Changes that affect the build system or external dependencies
+# revert: Reverts a previous commit
+
+# Examples:
+# feat(auth): add login functionality
+# fix(dashboard): resolve chart rendering issue
+# docs: update README with installation steps
+# style: format code with prettier
+# refactor(components): restructure table component
+# test(utils): add unit tests for data helpers
+# chore: update dependencies to latest versions
