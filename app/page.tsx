@@ -1,31 +1,32 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
-import { useUIStore } from '@/store'
-import { DashboardHeader } from '@/features/dashboard'
-import { LazyResponsiveChartContainer } from '@/features/charts/components/LazyChartContainer'
-import { EmptyState, DashboardSkipLinks } from '@/shared/components'
-import { Container, LoadingSpinner, Sidebar, SidebarProvider } from '@/components/ui'
-import { LazyTableContainer } from '@/features/tables'
-import LazyAIAssistant from '@/features/ai-assistant/components/LazyAIAssistant'
-import { useInitializationStatus } from '@/components/DataInitializer'
-import { AppSidebar } from '@/components/app-sidebar'
+import React from "react";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { useUIStore } from "@/store";
+import { DashboardHeader } from "@/features/dashboard";
+import { LazyResponsiveChartContainer } from "@/features/charts/components/LazyChartContainer";
+import { EmptyState, DashboardSkipLinks } from "@/shared/components";
+import { Container, LoadingSpinner, SidebarProvider } from "@/components/ui";
+import { LazyTableContainer } from "@/features/tables";
+import LazyAIAssistant from "@/features/ai-assistant/components/LazyAIAssistant";
+import { useInitializationStatus } from "@/components/DataInitializer";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function Page() {
   const activeTab = useUIStore(state => state.uiState.activeTab);
   const setActiveTab = useUIStore(state => state.setActiveTab);
   const { isLoading, hasData } = useInitializationStatus();
 
-
   const renderActiveContent = () => {
     if (isLoading) {
       return (
-        <div className="flex items-center justify-center py-12" role="status" aria-live="polite">
+        <div
+          className="flex items-center justify-center py-12"
+          role="status"
+          aria-live="polite"
+        >
           <LoadingSpinner size="lg" ariaLabel="Loading dashboard data" />
-          <div className="ml-4">
-            Loading sales data...
-          </div>
+          <div className="ml-4">Loading sales data...</div>
         </div>
       );
     }
@@ -40,7 +41,7 @@ export default function Page() {
     }
 
     switch (activeTab) {
-      case 'charts':
+      case "charts":
         return (
           <div className="space-y-6 mt-4">
             <div className="text-center md:text-left">
@@ -64,7 +65,7 @@ export default function Page() {
           </div>
         );
 
-      case 'tables':
+      case "tables":
         return (
           <div className="space-y-6 mt-4">
             {/* Header Section */}
@@ -85,7 +86,7 @@ export default function Page() {
           </div>
         );
 
-      case 'ai':
+      case "ai":
         return (
           <div className="space-y-6">
             {/* Header Section */}
@@ -118,25 +119,23 @@ export default function Page() {
   return (
     <>
       <DashboardSkipLinks />
-        <DashboardLayout>
-          <SidebarProvider>
+      <DashboardLayout>
+        <SidebarProvider>
           <AppSidebar />
 
           <Container>
             <div id="navigation">
-            <DashboardHeader
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-            />
-          </div>
-          <main id="main-content" role="main">
-            <div id="dashboard-content">
-              {renderActiveContent()}
+              <DashboardHeader
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+              />
             </div>
-          </main>
+            <main id="main-content" role="main">
+              <div id="dashboard-content">{renderActiveContent()}</div>
+            </main>
           </Container>
-          </SidebarProvider>
-        </DashboardLayout>
+        </SidebarProvider>
+      </DashboardLayout>
     </>
-  )
+  );
 }

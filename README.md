@@ -6,17 +6,19 @@ A comprehensive sales analytics dashboard built for the Natura Labs Frontend Dev
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - pnpm (recommended) or npm/yarn
 
 ### Installation & Setup
 
 1. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 2. **Start the development server:**
+
    ```bash
    pnpm dev
    ```
@@ -31,28 +33,36 @@ pnpm dev          # Start development server with Turbopack
 pnpm build        # Build for production
 pnpm start        # Start production server
 pnpm lint         # Run ESLint
+pnpm lint:fix     # Run ESLint with auto-fix
+pnpm test         # Run tests
+pnpm test:watch   # Run tests in watch mode
+pnpm test:ui      # Run tests with UI
 ```
 
 ## 📊 Features
 
 ### Interactive Data Visualization
+
 - **ECharts Integration**: High-performance charts with smooth animations
 - **Multiple Chart Types**: Line and bar charts with responsive design
 - **Comparison Modes**: Toggle between "Week-over-Week" and "Cumulative Total" views
 - **Null Data Handling**: Graceful visualization of missing data points
 
 ### Advanced Table Analytics
+
 - **Pivot-Style Tables**: Comprehensive data analysis with @tanstack/react-table
 - **Multi-Dimensional Filtering**: Filter by brands, categories, and date ranges
 - **Smart Totals**: Automatic calculation excluding null values
 - **Empty States**: User-friendly messages when no data matches filters
 
 ### Formula Display & Calculations
+
 - **LaTeX Rendering**: Mathematical formulas using react-katex
 - **Average Sales per Week**: `\frac{\text{Total Sales}}{\text{Weeks with Data}}`
 - **Null-Safe Calculations**: Proper handling of missing data in computations
 
 ### AI Assistant Integration
+
 - **Mock AI Interface**: Demonstrates AI/MCP integration patterns
 - **Contextual Responses**: Smart responses based on current data context
 - **Query Examples**: Built-in examples for user guidance
@@ -60,6 +70,7 @@ pnpm lint         # Run ESLint
 ## 🏗️ Architecture
 
 ### Project Structure
+
 ```
 ├── app/                    # Next.js App Router
 ├── components/            # Shared UI components
@@ -75,6 +86,7 @@ pnpm lint         # Run ESLint
 ```
 
 ### Key Technologies
+
 - **Framework**: Next.js 15 with App Router
 - **UI**: React 19 + TypeScript
 - **Styling**: Tailwind CSS + Radix UI
@@ -82,8 +94,11 @@ pnpm lint         # Run ESLint
 - **State**: Zustand for global state management
 - **Testing**: Vitest + Testing Library
 - **Math**: KaTeX for formula rendering
+- **Code Quality**: ESLint + Prettier + Husky + lint-staged
+- **Commit Standards**: Commitlint with conventional commits
 
 ### Design Patterns
+
 - **Feature-based Architecture**: Modular organization by business domain
 - **Custom Hooks**: Business logic separation from UI components
 - **Error Boundaries**: Comprehensive error handling and recovery
@@ -93,6 +108,7 @@ pnpm lint         # Run ESLint
 ## 🔧 Data Handling
 
 ### Sample Data Structure
+
 The dashboard uses a specific test dataset with the following structure:
 
 ```typescript
@@ -122,16 +138,19 @@ The dashboard uses a specific test dataset with the following structure:
 The application implements robust null data handling across all components:
 
 #### Charts
+
 - **Null Visualization**: Missing data points appear as gaps in line charts
 - **No Crashes**: Charts render smoothly even with null values
 - **Specific Positions**: Handles nulls at Fitness[Week 4], Recovery[Week 5], Gear[Week 2]
 
 #### Tables
+
 - **Display**: Null values shown as "-" or "N/A"
 - **Calculations**: Totals automatically exclude null values
 - **Filtering**: Null-safe filtering operations
 
 #### Formulas
+
 - **Exclusion Logic**: Average calculations exclude null values from both numerator and denominator
 - **Expected Results**:
   - Fitness: (120+150+180+210)/4 = 165
@@ -140,6 +159,7 @@ The application implements robust null data handling across all components:
   - Gear: (50+65+70+80)/4 = 66.25
 
 #### Error Boundaries
+
 - **Component-Level**: Each major feature has error boundaries
 - **Graceful Degradation**: Fallback UI when components fail
 - **Error Recovery**: Automatic retry mechanisms where appropriate
@@ -147,18 +167,21 @@ The application implements robust null data handling across all components:
 ## 🎨 Design Philosophy
 
 ### Chart Design Decisions
+
 1. **ECharts Selection**: Chosen for performance, customization, and null handling capabilities
 2. **Color Palette**: Consistent brand colors across all visualizations
 3. **Responsive Design**: Charts adapt to different screen sizes and orientations
 4. **Accessibility**: Proper ARIA labels and keyboard navigation support
 
 ### Table Design Decisions
+
 1. **Pivot Layout**: Optimized for cross-category analysis
 2. **Progressive Disclosure**: Advanced filters hidden until needed
 3. **Performance**: Virtualization for large datasets (future-ready)
 4. **Mobile-First**: Touch-friendly interactions on mobile devices
 
 ### User Experience Principles
+
 - **Progressive Enhancement**: Core functionality works without JavaScript
 - **Loading States**: Skeleton screens and loading indicators
 - **Error Recovery**: Clear error messages with actionable solutions
@@ -167,6 +190,7 @@ The application implements robust null data handling across all components:
 ## 🤖 AI/MCP Integration Potential
 
 ### Current Implementation
+
 The dashboard includes a mock AI assistant that demonstrates integration patterns:
 
 ```typescript
@@ -182,6 +206,7 @@ const handleAIQuery = (query: string) => {
 ### Future AI/MCP Extensions
 
 #### 1. Natural Language Queries
+
 ```typescript
 // Potential MCP integration
 const mcpClient = new MCPClient({
@@ -195,26 +220,30 @@ const mcpClient = new MCPClient({
 ```
 
 #### 2. Intelligent Data Insights
+
 - **Anomaly Detection**: AI-powered identification of unusual patterns
 - **Trend Prediction**: Forecasting based on historical data
 - **Smart Recommendations**: Suggested filters and views based on user behavior
 
 #### 3. Dynamic Dashboard Generation
+
 - **Layout Optimization**: AI-driven dashboard layout based on data importance
 - **Personalization**: User-specific dashboard configurations
 - **Auto-Reporting**: Scheduled insights and summaries
 
 #### 4. Advanced Analytics
+
 ```typescript
 // MCP tool integration example
 const analyticsTools = {
-  "correlation-analysis": (data) => findCorrelations(data),
-  "seasonal-patterns": (data) => detectSeasonality(data),
-  "performance-metrics": (data) => calculateKPIs(data)
+  "correlation-analysis": data => findCorrelations(data),
+  "seasonal-patterns": data => detectSeasonality(data),
+  "performance-metrics": data => calculateKPIs(data),
 };
 ```
 
 ### Integration Architecture
+
 ```
 Frontend (React) ↔ MCP Client ↔ MCP Server ↔ AI Models
                                     ↓
@@ -226,12 +255,14 @@ Frontend (React) ↔ MCP Client ↔ MCP Server ↔ AI Models
 ## 🧪 Testing Strategy
 
 ### Test Coverage
+
 - **Unit Tests**: Individual component and utility testing
 - **Integration Tests**: Feature-level workflow testing
 - **Accessibility Tests**: ARIA compliance and keyboard navigation
 - **Visual Regression**: Chart rendering consistency
 
 ### Running Tests
+
 ```bash
 # Run all tests
 pnpm test
@@ -246,6 +277,7 @@ pnpm test:ui
 ## 🚀 Deployment
 
 ### Build Process
+
 ```bash
 # Production build
 pnpm build
@@ -255,29 +287,74 @@ pnpm start
 ```
 
 ### Environment Requirements
+
 - Node.js 18+
 - 512MB RAM minimum
 - Modern browser with ES2020 support
 
 ### Performance Optimizations
+
 - **Code Splitting**: Automatic route-based splitting
 - **Tree Shaking**: Unused code elimination
 - **Image Optimization**: Next.js automatic image optimization
 - **Bundle Analysis**: Built-in bundle analyzer
 
+## 🛠️ Code Quality & Pre-commit Hooks
+
+This project uses automated code quality tools to ensure consistent, high-quality code:
+
+### Pre-commit Hooks (Husky + lint-staged)
+
+- **Automatic Linting**: ESLint runs on staged files with auto-fix
+- **Code Formatting**: Prettier formats all staged files
+- **Test Validation**: Related tests run for changed files
+- **Commit Message Validation**: Enforces conventional commit format
+
+### Conventional Commits
+
+All commit messages must follow the conventional commit format:
+
+```
+type(scope): description
+
+feat: add new dashboard component
+fix: resolve chart rendering issue
+docs: update README with setup instructions
+style: format code with prettier
+refactor: restructure component hierarchy
+test: add unit tests for data utils
+chore: update dependencies
+```
+
+### Manual Quality Checks
+
+```bash
+pnpm lint         # Check for linting issues
+pnpm lint:fix     # Fix linting issues automatically
+pnpm test         # Run all tests
+pnpm test:watch   # Run tests in watch mode
+```
+
 ## 🤝 Contributing
 
 ### Development Workflow
+
 1. Create feature branch from `main`
 2. Implement changes with tests
-3. Run `pnpm lint` and `pnpm test`
-4. Submit pull request with description
+3. Commit using conventional commit format
+4. Pre-commit hooks will automatically:
+   - Lint and format your code
+   - Run related tests
+   - Validate commit message format
+5. Submit pull request with description
 
 ### Code Standards
+
 - **TypeScript**: Strict mode enabled
-- **ESLint**: Next.js recommended configuration
-- **Prettier**: Automatic code formatting
-- **Conventional Commits**: Structured commit messages
+- **ESLint**: Next.js recommended configuration with auto-fix
+- **Prettier**: Automatic code formatting on commit
+- **Conventional Commits**: Enforced via commitlint
+- **Pre-commit Hooks**: Automated quality checks with Husky
 
 ## 📝 License
 
