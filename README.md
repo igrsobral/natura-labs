@@ -306,7 +306,7 @@ pnpm start
 - **Image Optimization**: Next.js automatic image optimization
 - **Bundle Analysis**: Built-in bundle analyzer
 
-## 🛠️ Code Quality & Pre-commit Hooks
+## 🛠️ Code Quality & Git Hooks
 
 This project uses automated code quality tools to ensure consistent, high-quality code:
 
@@ -316,6 +316,13 @@ This project uses automated code quality tools to ensure consistent, high-qualit
 - **Code Formatting**: Prettier formats all staged files
 - **Test Validation**: Related tests run for changed files
 - **Commit Message Validation**: Enforces conventional commit format
+
+### Pre-push Hooks
+
+- **Full Lint Check**: Complete ESLint validation across the entire codebase
+- **Test Suite**: All tests must pass before pushing
+- **Build Verification**: Ensures the project builds successfully
+- **Quality Gate**: Prevents broken code from reaching the remote repository
 
 ### Conventional Commits
 
@@ -353,7 +360,12 @@ pnpm test:watch   # Run tests in watch mode
    - Lint and format your code
    - Run related tests
    - Validate commit message format
-5. Submit pull request with description
+5. Push to remote repository
+6. Pre-push hooks will automatically:
+   - Run full lint check on entire codebase
+   - Execute complete test suite
+   - Verify production build
+7. Submit pull request with description
 
 ### Code Standards
 
@@ -362,6 +374,7 @@ pnpm test:watch   # Run tests in watch mode
 - **Prettier**: Automatic code formatting on commit
 - **Conventional Commits**: Enforced via commitlint
 - **Pre-commit Hooks**: Automated quality checks with Husky
+- **Pre-push Hooks**: Full validation before remote push (lint + test + build)
 
 ## 📝 License
 

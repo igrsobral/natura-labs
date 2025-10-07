@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-push checks..."
+
+# Run linting
+echo "📋 Checking code quality with ESLint..."
+pnpm lint
+if [ $? -ne 0 ]; then
+  echo "❌ Linting failed. Please fix the issues before pushing."
+  exit 1
+fi
+
+# Run tests
+echo "🧪 Running tests..."
+pnpm test --run
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Please fix the failing tests before pushing."
+  exit 1
+fi
+
+# Run build
+echo "🏗️ Verifying build..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed. Please fix the build errors before pushing."
+  exit 1
+fi
+
+echo "✅ All pre-push checks passed! Pushing to remote..."
