@@ -80,7 +80,7 @@ export function DashboardHeader({
   }, [isMobileMenuOpen]);
 
   return (
-    <div className={`bg-card shadow-sm border-b border-border sticky top-0 z-40 ${className}`}>
+    <div className={`border-b border-border sticky top-0 z-40 ${className}`}>
       <Container size="2xl" padding="md">
         <div className="flex items-center justify-between h-14 sm:h-16 w-full">
 

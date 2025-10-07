@@ -223,7 +223,9 @@ export function getEChartsConfig(
         `;
         
         paramArray.forEach((param: { value?: { value?: unknown } | unknown; name: string; seriesName: string; color: string }) => {
-          const value = param.value?.value ?? param.value;
+          const value = (param.value && typeof param.value === 'object' && 'value' in param.value) 
+            ? (param.value as { value?: unknown }).value 
+            : param.value;
           const displayValue = value === null ? 'No data' : 
             config.comparisonMode === 'week-over-week' && typeof value === 'number' ? 
               `${value > 0 ? '+' : ''}${value}%` : 

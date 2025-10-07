@@ -37,7 +37,7 @@ export function testCalculations(): {
   console.log('Testing formula calculations...');
   
   // Test average sales calculation
-  const averageSales = calculateAverageSales(sampleSalesData, 'Test Dataset');
+  const averageSales = calculateAverageSales(sampleSalesData);
   console.log('Average Sales:', averageSales);
   
   // Test week-over-week calculation
@@ -49,7 +49,7 @@ export function testCalculations(): {
   console.log('Cumulative:', cumulative);
   
   // Test dataset metrics
-  const datasetMetrics = calculateDatasetMetrics(sampleDataset, sampleDateLabels);
+  const datasetMetrics = calculateDatasetMetrics(sampleDataset);
   console.log('Dataset Metrics:', datasetMetrics);
   
   return {
@@ -90,19 +90,19 @@ export function testEdgeCases(): {
   console.log('Testing edge cases...');
   
   // All null values
-  const allNull = calculateAverageSales([null, null, null], 'All Null');
+  const allNull = calculateAverageSales([null, null, null]);
   console.log('All Null:', allNull);
   
   // Single value
-  const singleValue = calculateAverageSales([100], 'Single Value');
+  const singleValue = calculateAverageSales([100]);
   console.log('Single Value:', singleValue);
   
   // Zero values
-  const zeroValues = calculateAverageSales([0, 0, 0], 'Zero Values');
+  const zeroValues = calculateAverageSales([0, 0, 0]);
   console.log('Zero Values:', zeroValues);
   
   // Empty array
-  const emptyArray = calculateAverageSales([], 'Empty Array');
+  const emptyArray = calculateAverageSales([]);
   console.log('Empty Array:', emptyArray);
   
   return {

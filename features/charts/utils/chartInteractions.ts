@@ -105,7 +105,7 @@ function setupKeyboardInteractions(chart: ECharts) {
       case ' ':
         // Trigger click on focused data point
         event.preventDefault();
-        triggerDataPointAction(chart);
+        triggerDataPointAction();
         break;
       case 'Escape':
         // Clear selection/focus
@@ -328,10 +328,10 @@ export function handleEmptyChart(
  */
 export function animateChartTransition(
   chart: ECharts,
-  newOption: unknown,
+  newOption: Record<string, unknown>,
   duration: number = 750
 ) {
-  chart.setOption(newOption, {
+  chart.setOption(newOption as Parameters<typeof chart.setOption>[0], {
     notMerge: false,
     lazyUpdate: false,
     silent: false
